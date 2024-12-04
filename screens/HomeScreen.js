@@ -9,10 +9,10 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>VidioLister</Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Page1")}> 
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Login")}> 
           <Text style={styles.buttonText }>Login In</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Page1")}> 
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Register")}> 
           <Text style={styles.buttonText }>Register</Text>
         </TouchableOpacity>
       </View>
