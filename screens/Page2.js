@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Button } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../utils/firebaseConfig';
 import { useUser } from '../context/UserContext'; // Importem el context global
@@ -58,6 +58,11 @@ export default function Page2({ navigation }) {
           </TouchableOpacity>
         )}
         contentContainerStyle={styles.listContainer}
+      />
+       <Button
+        title="Afegir vídeo"
+        onPress={() => navigation.navigate('AddVideo')} // Naveguem a AddVideo
+        color="#E70467"
       />
       <FSection styles={{ flex: 3 }} currentSection={2} onPress={handlePress2} />
     </View>
