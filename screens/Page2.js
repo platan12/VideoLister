@@ -3,45 +3,55 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../utils/firebaseConfig';
 import { useUser } from '../context/UserContext'; // Importem el context global
+import FSection from '../components/FSection'; // Reutilitzem el component
 
 export default function Page2({ navigation }) {
-  const [listNames, setListNames] = useState([]); // Estat per emmagatzemar els noms de les llistes
+  const [listNames, setListNames] = useState([]);
   const { userUID } = useUser(); // Obtenim l'UID de l'usuari loguejat
 
   useEffect(() => {
     const fetchLists = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'videos')); // Obtenim tots els documents
-        const lists = new Set(); // Fem servir un conjunt per evitar duplicats
-  
+        const lists = new Set();
+
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           if (data.usuari === userUID && typeof data.llista === 'string') {
-            // Afegim el nom de la llista al conjunt només si és una cadena
             lists.add(data.llista);
           }
         });
-  
+
         setListNames(Array.from(lists)); // Convertim el conjunt a una matriu
       } catch (error) {
         console.error('Error fetching lists:', error);
       }
     };
-  
+
     fetchLists();
   }, [userUID]);
 
-  // Funció per gestionar el clic a una llista
+  // Funció per navegar a PickedList
   const handlePress = (listName) => {
-    navigation.navigate('PickedList', { listName }); // Naveguem a PickedList amb el nom de la llista
+    navigation.navigate('PickedList', { listName });
+  };
+
+  // Implementació de handlePress2
+  const handlePress2 = (id) => {
+    console.log('Han clicat al botó ' + id);
+    if (id === 1) {
+      navigation.navigate('Page1');
+    } else if (id === 3) {
+      navigation.navigate('Home');
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Listes Úniques</Text>
+      <Text style={styles.titleText}>Llistes disponibles</Text>
       <FlatList
         data={listNames}
-        keyExtractor={(item, index) => `${item}-${index}`} // Clau única per a cada llista
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.listItem} onPress={() => handlePress(item)}>
             <Text style={styles.listName}>{item}</Text>
@@ -49,6 +59,7 @@ export default function Page2({ navigation }) {
         )}
         contentContainerStyle={styles.listContainer}
       />
+      <FSection styles={{ flex: 3 }} currentSection={2} onPress={handlePress2} />
     </View>
   );
 }
@@ -60,7 +71,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   titleText: {
-    fontSize: 40,
+    fontSize: 30,
     color: '#FFFFFF',
     fontWeight: 'bold',
     textAlign: 'center',

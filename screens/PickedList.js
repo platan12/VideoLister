@@ -51,6 +51,9 @@ export default function PickedList({ route, navigation }) {
         )}
         contentContainerStyle={styles.listContainer}
       />
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>Torna Enrere</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -80,6 +83,18 @@ const styles = StyleSheet.create({
   videoTitle: {
     fontSize: 18,
     color: '#630032',
+    fontWeight: 'bold',
+  },
+  backButton: {
+    backgroundColor: '#E70467',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    
+  },
+  backButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
