@@ -1,28 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../utils/firebaseConfig';
+import FSection from '../components/FSection';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
-export default function Page1({ navigation }) {
+export default function Page1({ navigation, route }) {
   const [videos, setVideos] = useState([]);
+  const { userUID } = route.params; // Obtenim l'UID de l'usuari passat des de LoginScreen
+  
+  
 
-  // Funció per obtenir vídeos des de Firebase
   useEffect(() => {
     const fetchVideos = async () => {
-      const videoList = [];
-      const querySnapshot = await getDocs(collection(db, 'videos')); // Assumeix que tens una col·lecció 'videos'
-      querySnapshot.forEach((doc) => {
-        videoList.push({ id: doc.id, ...doc.data() });
-      });
-      setVideos(videoList);
+      try {
+        console.log(userUID);
+        const videoQuery = query(
+          collection(db, 'videos'),
+          where('llista', '==', 'Favorits'),
+          where('usuari', '==', userUID) // Filtra pels vídeos de l'usuari
+        );
+
+        const querySnapshot = await getDocs(videoQuery);
+        const videoList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setVideos(videoList);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      }
     };
 
     fetchVideos();
-  }, []);
+  }, [userUID]);
 
-  // Funció per navegar a la pàgina del vídeo
   const handlePress = (video) => {
     navigation.navigate('VideoPlayerPage', { video });
+  };
+
+  const handlePress2 = (id) => {
+    console.log('Han clicat al botó ' + id);
+    if (id === 2) {
+      navigation.navigate('Page2');
+    } else if (id === 3) {
+      navigation.navigate('Home');
+    }
   };
 
   return (
@@ -38,6 +61,7 @@ export default function Page1({ navigation }) {
         )}
         contentContainerStyle={styles.listContainer}
       />
+      <FSection styles={{ flex: 3 }} currentSection={1} onPress={handlePress2} />
     </View>
   );
 }

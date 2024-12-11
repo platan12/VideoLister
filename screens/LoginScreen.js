@@ -12,9 +12,9 @@ export default function LoginScreen({ navigation }) {
      const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      const userUID = auth.currentUser.uid; // Obtenim l'UID de l'usuari
       Alert.alert('Success', 'You are logged in!');
-      // Navigate to another screen, e.g., Home
-      navigation.navigate('Page1');
+      navigation.navigate('Page1', { userUID }); // Passem l'UID a Page1
     } catch (error) {
       Alert.alert('Error', error.message);
     }
