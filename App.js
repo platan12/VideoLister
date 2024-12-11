@@ -7,6 +7,7 @@ import Page2 from './screens/Page2'; // Exemple d'una altra pantalla
 import LoginScreen from './screens/LoginScreen'; // Exemple d'una altra pantalla
 import RegisterScreen from './screens/RegisterScreen'; // Exemple d'una altra pantalla
 import VideoPlayerPage from './screens/VideoPlayerPage';
+import PickedList from './screens/PickedList';
 import { UserProvider } from './context/UserContext';
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +23,7 @@ export default function App() {
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false ,  animation: 'none'}} />
           <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false ,  animation: 'none'}} />
           <Stack.Screen name="VideoPlayerPage" component={VideoPlayerPage} options={{ headerShown: false ,  animation: 'none'}} />
+          <Stack.Screen name="PickedList" component={PickedList} options={{ headerShown: false ,  animation: 'none'}} />
           
         </Stack.Navigator>
       </NavigationContainer>
