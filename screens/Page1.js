@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { db } from '../utils/firebaseConfig';
-import FSection from '../components/FSection';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../utils/firebaseConfig';
+import { useUser } from '../context/UserContext'; // Importa el context global
+import FSection from '../components/FSection'; // Assumeix que tens aquest component implementat
 
-export default function Page1({ navigation, route }) {
+export default function Page1({ navigation }) {
   const [videos, setVideos] = useState([]);
-  const { userUID } = route.params; // Obtenim l'UID de l'usuari passat des de LoginScreen
-  
-  
+  const { userUID } = useUser(); // Obtenim l'UID de l'usuari del context global
 
+  // Funció per obtenir vídeos des de Firebase
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        console.log(userUID);
         const videoQuery = query(
           collection(db, 'videos'),
           where('llista', '==', 'Favorits'),
-          where('usuari', '==', userUID) // Filtra pels vídeos de l'usuari
+          where('usuari', '==', userUID) // Filtra per l'usuari loguejat
         );
 
         const querySnapshot = await getDocs(videoQuery);
@@ -35,10 +34,12 @@ export default function Page1({ navigation, route }) {
     fetchVideos();
   }, [userUID]);
 
+  // Funció per navegar a la pàgina del vídeo
   const handlePress = (video) => {
     navigation.navigate('VideoPlayerPage', { video });
   };
 
+  // Gestió de navegació entre pàgines
   const handlePress2 = (id) => {
     console.log('Han clicat al botó ' + id);
     if (id === 2) {

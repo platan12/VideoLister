@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
-import { db, auth } from '../utils/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../utils/firebaseConfig';
+import { useUser } from '../context/UserContext'; // Importa el context
 
 export default function LoginScreen({ navigation }) {
-
-    const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { setUserUID } = useUser(); // Obtenim la funció per establir l'UID
 
-     const handleLogin = async () => {
+  const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      const userUID = auth.currentUser.uid; // Obtenim l'UID de l'usuari
+      const userUID = auth.currentUser.uid; // Obtenim l'UID
+      setUserUID(userUID); // Guardem l'UID al context global
       Alert.alert('Success', 'You are logged in!');
-      navigation.navigate('Page1', { userUID }); // Passem l'UID a Page1
+      navigation.navigate('Page1');
     } catch (error) {
       Alert.alert('Error', error.message);
     }
-  }; 
+  };
 
   return (
     <View style={styles.container}>
@@ -73,4 +74,4 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
   },
-}); 
+});
